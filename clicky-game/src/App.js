@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import Player from "./components/Player";
+import style from "./App.css";
 
 class App extends Component {
   state = {
     score: 0,
-    clickedPlayers: []
+    clickedPlayers: [],
+    gameOverMessage: ""
   };
 
   playerImages = [
@@ -74,29 +76,43 @@ class App extends Component {
     return playerArray;
   };
 
-  handlePlayerClick = currentPlayer => {
-    this.shufflePlayers(this.playerImages);
+  userScoring = currentlyClickedPlayer => {
     let score = this.state.score;
-    let clickedPlayers = this.state.clickedPlayers;
+    let alreadyClickedPlayers = this.state.clickedPlayers;
 
-    if (!clickedPlayers.includes(currentPlayer)) {
-      clickedPlayers.push(currentPlayer);
+    if (!alreadyClickedPlayers.includes(currentlyClickedPlayer)) {
+      alreadyClickedPlayers.push(currentlyClickedPlayer);
       score++;
-      this.setState({
-        score: score
-      });
+      if (score < 12) {
+        this.setState({
+          score: score,
+          gameOverMessage: ""
+        });
+      } else {
+        this.setState({
+          score: 0,
+          clickedPlayers: [],
+          gameOverMessage: "YOU WIN! Click an image to play again"
+        });
+      }
     } else {
       this.setState({
         score: 0,
-        clickedPlayers: []
+        clickedPlayers: [],
+        gameOverMessage: "GAME OVER! Click an image to play again"
       });
     }
   };
 
+  handlePlayerClick = currentPlayer => {
+    this.shufflePlayers(this.playerImages);
+    this.userScoring(currentPlayer);
+  };
+
   renderImage = (imageURL, imageAltText) => {
     const style = {
-      height: "200px",
-      width: "135px",
+      height: "150px",
+      width: "100px",
       cursor: "pointer",
       boxShadow: "3px 3px 5px 6px #ccc"
     };
@@ -124,18 +140,48 @@ class App extends Component {
 
     const containerStyle = {
       width: "1000px"
-      // backgroundColor: "blue"
     };
+
+    const navStyling = {
+      fontSize: "30px",
+      fontWeight: "bold",
+      color: "black"
+    };
+
+    const gameOverStyling = {
+      color: "red",
+      fontWeight: "bold",
+      fontSize: "25px"
+    }
 
     return (
       <div>
-        <div className="jumbotron">
+        <nav className="navbar sticky-top navbar-light bg-danger">
+          <span className="navbar-brand" style={navStyling}>
+            Red Sox Clicky Game
+          </span>
+          <span className="navbar-text" style={navStyling}>
+            Score: {this.state.score}
+          </span>
+        </nav>
+        <div className="jumbotron" style={style.jumbotron}>
           <div className="container">
-            <h1>Boston Red Sox Shuffle</h1>
-            <h2>Score: {this.state.score} </h2>
+            <div>
+              <img
+                className="mx-auto d-block"
+                style={{ height: "200px" }}
+                src="https://i.ya-webdesign.com/images/boston-red-sox-png-11.png"
+                alt="Red Sox Logo"
+              />
+              <h2 className="my-4 mx-auto text-center col-8">
+                Click on an image to earn points, but don't click on any more
+                than once!
+              </h2>
+            </div>
           </div>
         </div>
         <div className="container" style={containerStyle}>
+          <span className="text-center mx-auto d-block" style={gameOverStyling}>{this.state.gameOverMessage}</span>
           {players}
         </div>
       </div>
