@@ -5,57 +5,58 @@ import style from "./App.css";
 class App extends Component {
   state = {
     score: 0,
+    highScore: 0,
     clickedPlayers: [],
     gameOverMessage: ""
   };
 
   playerImages = [
     {
-      image: "https://securea.mlb.com/mlb/images/players/head_shot/643217.jpg",
+      image: "benny.jpg",
       name: "Andrew Benintendi"
     },
     {
-      image: "https://securea.mlb.com/mlb/images/players/head_shot/571788.jpg",
+      image: "brock.jpg",
       name: "Brock Holt"
     },
     {
-      image: "https://securea.mlb.com/mlb/images/players/head_shot/656308.jpg",
+      image: "chavis.jpg",
       name: "Michael Chavis"
     },
     {
-      image: "https://securea.mlb.com/mlb/images/players/head_shot/598265.jpg",
+      image: "jbj.jpg",
       name: "Jackie Bradley Jr."
     },
     {
-      image: "https://securea.mlb.com/mlb/images/players/head_shot/502110.jpg",
+      image: "jdmartinez.jpg",
       name: "J.D. Martinez"
     },
     {
-      image: "https://securea.mlb.com/mlb/images/players/head_shot/605141.jpg",
+      image: "mookie.jpg",
       name: "Mookie Betts"
     },
     {
-      image: "https://securea.mlb.com/mlb/images/players/head_shot/519144.jpg",
+      image: "porcello.jpg",
       name: "Rick Porcello"
     },
     {
-      image: "https://securea.mlb.com/mlb/images/players/head_shot/456034.jpg",
+      image: "price.jpg",
       name: "David Price"
     },
     {
-      image: "https://securea.mlb.com/mlb/images/players/head_shot/646240.jpg",
+      image: "rafi.jpg",
       name: "Rafeal Devers"
     },
     {
-      image: "https://securea.mlb.com/mlb/images/players/head_shot/519242.jpg",
+      image: "sale.jpg",
       name: "Chris Sale"
     },
     {
-      image: "https://securea.mlb.com/mlb/images/players/head_shot/543877.jpg",
+      image: "vazquez.jpg",
       name: "Christian Vasquez"
     },
     {
-      image: "https://securea.mlb.com/mlb/images/players/head_shot/593428.jpg",
+      image: "xander.jpg",
       name: "Xander Bogaerts"
     }
   ];
@@ -76,6 +77,25 @@ class App extends Component {
     return playerArray;
   };
 
+  setHighScore = () => {
+    let score = this.state.score;
+    let highScore = this.state.highScore;
+
+    if (score >= highScore) {
+      this.setState({
+        highScore: score
+      })
+    }
+  }
+
+  resetGame = gameOverMessage => {
+    this.setState({
+      score: 0,
+      clickedPlayers: [],
+      gameOverMessage: `${gameOverMessage} Click an image to play again`
+    });
+  }
+
   userScoring = currentlyClickedPlayer => {
     let score = this.state.score;
     let alreadyClickedPlayers = this.state.clickedPlayers;
@@ -83,24 +103,17 @@ class App extends Component {
     if (!alreadyClickedPlayers.includes(currentlyClickedPlayer)) {
       alreadyClickedPlayers.push(currentlyClickedPlayer);
       score++;
+      this.setHighScore();
       if (score < 12) {
         this.setState({
           score: score,
           gameOverMessage: ""
         });
       } else {
-        this.setState({
-          score: 0,
-          clickedPlayers: [],
-          gameOverMessage: "YOU WIN! Click an image to play again"
-        });
+        this.resetGame("YOU WIN!");
       }
     } else {
-      this.setState({
-        score: 0,
-        clickedPlayers: [],
-        gameOverMessage: "GAME OVER! Click an image to play again"
-      });
+      this.resetGame("GAME OVER!");
     }
   };
 
@@ -131,7 +144,7 @@ class App extends Component {
           return (
             <Player
               click={() => this.handlePlayerClick(player)}
-              playerImage={this.renderImage(player.image, player.name)}
+              playerImage={this.renderImage(process.env.PUBLIC_URL + "/images/" + player.image, player.name)}
             />
           );
         })}
@@ -161,7 +174,7 @@ class App extends Component {
             Red Sox Clicky Game
           </span>
           <span className="navbar-text" style={navStyling}>
-            Score: {this.state.score}
+            Score: {this.state.score} | High Score: {this.state.highScore}
           </span>
         </nav>
         <div className="jumbotron" style={style.jumbotron}>
