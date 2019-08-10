@@ -1,0 +1,9 @@
+#container {
+    width: 1000px;
+};
+
+#gameOverMessage {
+    color: red;
+    font-weight: bold;
+    font-size: 25px;
+}
