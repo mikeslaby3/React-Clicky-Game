@@ -1,6 +1,9 @@
 import React, { Component } from "react";
-import Player from "./components/Player";
-import style from "./App.css";
+import Nav from "./components/Nav/Nav";
+import Jumbotron from "./components/Jumbotron/Jumbotron";
+import Player from "./components/Player/Player";
+import PlayerContainer from "./components/PlayerContainer/PlayerContainer";
+import playerImages from "./playerImages";
 
 class App extends Component {
   state = {
@@ -9,57 +12,6 @@ class App extends Component {
     clickedPlayers: [],
     gameOverMessage: ""
   };
-
-  playerImages = [
-    {
-      image: "benny.jpg",
-      name: "Andrew Benintendi"
-    },
-    {
-      image: "brock.jpg",
-      name: "Brock Holt"
-    },
-    {
-      image: "chavis.jpg",
-      name: "Michael Chavis"
-    },
-    {
-      image: "jbj.jpg",
-      name: "Jackie Bradley Jr."
-    },
-    {
-      image: "jdmartinez.jpg",
-      name: "J.D. Martinez"
-    },
-    {
-      image: "mookie.jpg",
-      name: "Mookie Betts"
-    },
-    {
-      image: "porcello.jpg",
-      name: "Rick Porcello"
-    },
-    {
-      image: "price.jpg",
-      name: "David Price"
-    },
-    {
-      image: "rafi.jpg",
-      name: "Rafeal Devers"
-    },
-    {
-      image: "sale.jpg",
-      name: "Chris Sale"
-    },
-    {
-      image: "vazquez.jpg",
-      name: "Christian Vasquez"
-    },
-    {
-      image: "xander.jpg",
-      name: "Xander Bogaerts"
-    }
-  ];
 
   shufflePlayers = playerArray => {
     let ctr = playerArray.length;
@@ -118,85 +70,30 @@ class App extends Component {
   };
 
   handlePlayerClick = currentPlayer => {
-    this.shufflePlayers(this.playerImages);
+    this.shufflePlayers(playerImages);
     this.userScoring(currentPlayer);
-  };
-
-  renderImage = (imageURL, imageAltText) => {
-    const style = {
-      height: "150px",
-      width: "100px",
-      cursor: "pointer",
-      boxShadow: "3px 3px 5px 6px #ccc"
-    };
-
-    return (
-      <div>
-        <img style={style} src={imageURL} alt={imageAltText} />
-      </div>
-    );
   };
 
   render() {
     const players = (
       <div className="row">
-        {this.playerImages.map((player, index) => {
+        {playerImages.map((player, index) => {
           return (
             <Player
               click={() => this.handlePlayerClick(player)}
-              playerImage={this.renderImage(process.env.PUBLIC_URL + "/images/" + player.image, player.name)}
+              image={process.env.PUBLIC_URL + "/images/" + player.image}
+              alt={player.name}
             />
           );
         })}
       </div>
     );
 
-    const containerStyle = {
-      width: "1000px"
-    };
-
-    const navStyling = {
-      fontSize: "30px",
-      fontWeight: "bold",
-      color: "black"
-    };
-
-    const gameOverStyling = {
-      color: "red",
-      fontWeight: "bold",
-      fontSize: "25px"
-    }
-
     return (
       <div>
-        <nav className="navbar sticky-top navbar-light bg-danger">
-          <span className="navbar-brand" style={navStyling}>
-            Red Sox Clicky Game
-          </span>
-          <span className="navbar-text" style={navStyling}>
-            Score: {this.state.score} | High Score: {this.state.highScore}
-          </span>
-        </nav>
-        <div className="jumbotron" style={style.jumbotron}>
-          <div className="container">
-            <div>
-              <img
-                className="mx-auto d-block"
-                style={{ height: "200px" }}
-                src="https://i.ya-webdesign.com/images/boston-red-sox-png-11.png"
-                alt="Red Sox Logo"
-              />
-              <h2 className="my-4 mx-auto text-center col-8">
-                Click on an image to earn points, but don't click on any more
-                than once!
-              </h2>
-            </div>
-          </div>
-        </div>
-        <div className="container" style={containerStyle}>
-          <span className="text-center mx-auto d-block" style={gameOverStyling}>{this.state.gameOverMessage}</span>
-          {players}
-        </div>
+        <Nav score={this.state.score} highScore={this.state.highScore} />
+        <Jumbotron />
+        <PlayerContainer players={players} />
       </div>
     );
   }
