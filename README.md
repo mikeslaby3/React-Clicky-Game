@@ -1,10 +1,10 @@
 # React-Clicky-Game
 
-Clicky game is a memory game where the objective is to click all 12 photos without clicking a photo twice. Each time you click a photo, the order of the images are randomly shuffled around.
+Memory game where the objective is to click all 12 photos without clicking the same photo twice. Each time you click an image, the order is randomly shuffled around.
 
-As an avid Boston sports fan, I decided to make the game Red Sox themed with the pictures being players on their 2018-2019 defending World Champions roster. Yankees suck.
+As an avid Boston sports fan, I decided to make the game Red Sox themed with the pictures being players on their 2018-2019 defending World Champions roster.
 
-To get started, just click a Sox player!
+To get started, just click a Sox player! (No Yankees fans allowed)
 
 ## Technologies Used
 
